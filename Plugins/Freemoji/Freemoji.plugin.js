@@ -180,6 +180,13 @@ module.exports = (() => {
                 name: 'Use PNG instead of WEBP',
                 note: 'If the emoji url points to a webp image, replace it with a png',
                 value: false
+            },
+            {
+                type: 'switch',
+                id: 'removeLosslessFlag',
+                name: 'Remove the lossless quality flag from the fetched URL',
+                note: 'Sometimes discord will not render the image preview when the flag is in the link, but I have not been able to confirm it',
+                value: false
             }
         ]
     };
@@ -469,6 +476,9 @@ You may choose to **delete the plugin now** or **dismiss this notice to not be b
                             let finalEmojiURL = emoji.url;
                             if (this.settings.replacePNG) {
                                 finalEmojiURL = finalEmojiURL.replace(".webp?", ".png?");
+                            }
+                            if (this.settings.removeLosslessFlag) {
+                                finalEmojiURL = finalEmojiURL.replace("&quality=lossless", "");
                             }
                             return finalEmojiURL.includes("size=") ?
                                 finalEmojiURL.replace(SIZE_REGEX, `$1${this.settings.emojiSize}`) :
